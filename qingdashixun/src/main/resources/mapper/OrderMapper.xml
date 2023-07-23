@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qianfeng.qingdashixun.mapper.OrderMapper">
+    <insert id="orderAdd">
+        insert into tb_order(orderNumber,commodityName,time,count,address,customer)
+        values(#{orderNumber},#{commodityName},#{time},#{count},#{address},#{customer})
+    </insert>
+    <update id="orderUpd">
+        update tb_order set
+                            orderNumber = #{orderNumber},
+                            commodityName = #{commodityName},
+                            time = #{time},
+                            count = #{count},
+                            address = #{address},
+                            customer = #{customer}
+        where id = #{id}
+    </update>
+
+    <select id="getOrderList" resultType="com.qianfeng.qingdashixun.pojo.Order">
+        select * from tb_order
+                <where>
+                    1=1
+                    <if test="orderNumber != null and orderNumber !=''">
+                        and orderNumber like concat('%',#{orderNumber},'%')
+                    </if>
+                    <if test="commodityName != null and commodityName !=''">
+                        and commodityName like concat('%',#{commodityName},'%')
+                    </if>
+                    <if test="time != null and time !=''">
+                        and time like concat('%',#{time},'%')
+                    </if>
+                    <if test="count != null">
+                        and count =#{count}
+                    </if>
+                    <if test="address != null and address !=''">
+                        and address like concat('%',#{address},'%')
+                    </if>
+                    <if test="customer != null and customer !=''">
+                        and customer like concat('%',#{customer},'%')
+                    </if>
+                </where>
+    </select>
+    <select id="getOrderById" resultType="com.qianfeng.qingdashixun.pojo.Order">
+        select * from tb_order where id = #{id}
+    </select>
+</mapper>

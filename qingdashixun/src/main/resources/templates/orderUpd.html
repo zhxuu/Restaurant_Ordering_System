@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>订单修改</title>
+    <!-- 请勿在项目正式环境中引用该 layui.css 地址 -->
+    <link href="//unpkg.com/layui@2.8.10/dist/css/layui.css" rel="stylesheet">
+</head>
+<body>
+<style>
+    .demo-reg-container{width: 320px; margin: 21px auto 0;}
+    .demo-reg-other .layui-icon{position: relative; display: inline-block; margin: 0 2px; top: 2px; font-size: 26px;}
+</style>
+<fieldset class="layui-elem-field" style="margin-top: 10%">
+    <legend style="margin-left: 47%">修改订单</legend>
+    <div class="layui-field-box">
+        <form class="layui-form">
+            <input hidden="hidden" th:value="${id}" id="id">
+            <div class="demo-reg-container">
+                <div class="layui-form-item">
+                    <div class="layui-input-wrap">
+                        <div class="layui-input-prefix">
+                            <i class="layui-icon layui-icon-password"></i>
+                        </div>
+                        <input type="text" name="orderNumber" id="orderNumber" lay-verify="required" placeholder="订单编号" autocomplete="off" class="layui-input" lay-affix="clear" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-wrap">
+                        <div class="layui-input-prefix">
+                            <i class="layui-icon layui-icon-username"></i>
+                        </div>
+                        <input type="text" name="commodityName" id="commodityName" lay-verify="required" placeholder="商品名称" autocomplete="off" class="layui-input" lay-affix="clear">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-wrap">
+                        <div class="layui-input-prefix">
+                            <i class="layui-icon layui-icon-username"></i>
+                        </div>
+                        <input type="text" name="address" id="address" value="" lay-verify="required" placeholder="订单地址" autocomplete="off" class="layui-input" lay-affix="clear">
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <div class="layui-input-wrap">
+                        <div class="layui-input-prefix">
+                            <i class="layui-icon layui-icon-username"></i>
+                        </div>
+                        <input type="text" name="time" id="time" value="" lay-verify="required" placeholder="下单时间" autocomplete="off" class="layui-input" lay-affix="clear" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-wrap">
+                        <div class="layui-input-prefix">
+                            <i class="layui-icon layui-icon-username"></i>
+                        </div>
+                        <input type="text" name="customer" id="customer" value="" lay-verify="required" placeholder="客户姓名" autocomplete="off" class="layui-input" lay-affix="clear">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-wrap">
+                        <div class="layui-input-prefix">
+                            <i class="layui-icon layui-icon-username"></i>
+                        </div>
+                        <input type="text" name="count" id="count" value="" lay-verify="required" placeholder="商品数量" autocomplete="off" class="layui-input" lay-affix="clear">
+                    </div>
+                </div>
+
+
+
+
+                <div class="layui-form-item">
+                    <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="demo-reg">修改</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</fieldset>
+
+<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.min.js"></script>
+
+<!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
+<script src="//unpkg.com/layui@2.8.10/dist/layui.js"></script>
+<script>
+    layui.use(function(){
+        var $ = layui.$;
+        var form = layui.form;
+        var layer = layui.layer;
+        var util = layui.util;
+        var upload=layui.upload;
+        var element=layui.element;
+        // $.ajax({
+        //     url:"http://localhost:8080/shixun/order/getOrderList",
+        //     dataType:"json",
+        //     type:"get",
+        //     async:false,
+        //     success:function (res){
+        //         var data = res.data;
+        //         for(var i = 0;i<data.length;i++){
+        //             $("#type").append("<option value='"+data[i].type+"'>"+data[i].type+"</option>");
+        //         }
+        //         form.render();
+        //     }
+        // })
+        var id = $("#id").val();
+        // var img_url='';
+        $.ajax({
+            url:"http://localhost:8080/shixun/order/getOrderById",
+            data:{"id":id},
+            dataType:"json",
+            type: "post",
+            success:function (res){
+                console.log(res);
+                var data = res.data;
+                // img_url = data.img_url;
+                //图片的回显
+                // $('#ID-upload-demo-img').attr('src', data.img_url);
+                $("#orderNumber").val(data.orderNumber);
+                $("#commodityName").val(data.commodityName);
+                $("#address").val(data.address);
+                $("#time").val(data.time);
+                $("#customer").val(data.customer);
+                $("#count").val(data.count);
+
+                form.render();
+            }
+        })
+
+        // var img_url='';
+        // 单图片上传
+
+
+        // 提交事件
+        form.on('submit(demo-reg)', function(data){
+            var field = data.field; // 获取表单字段值
+            field.id = id;
+            // field.img_url = img_url;
+            // 此处可执行 Ajax 等操作
+            // …
+            $.ajax({
+                url:"http://localhost:8080/shixun/order/orderUpd",
+                data:field,
+                dataType:"json",
+                type:"post",
+                success:function(res){
+                    if(res.isupd){
+                        alert(res.msg);
+                        location.href="http://localhost:8080/shixun/toOrder";
+                    }else{
+                        alert(res.msg);
+                    }
+                }
+            })
+            return false; // 阻止默认 form 跳转
+        });
+
+    });
+
+</script>
+</body>
+</html>

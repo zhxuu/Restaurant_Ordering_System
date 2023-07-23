@@ -1,0 +1,19 @@
+maven：项目管理器 管理jar文件 在pom.xml中写入
+依赖格式：
+<dependency>
+    <groupId>包名</groupId>
+
+</dependency>
+
+package com.qianfeng.qingdashixun.controller;
+
+import org.springframework.stereotype.Controller;
+///spring 分层：
+//控制层（controller），逻辑层（service），持久层（mapper）
+//控制层：与前端最近的一层，接受前端发送的请求，返回后端数据
+//逻辑层（service）：处理代码逻辑
+//持久层（mapper）：与数据库交互层
+//@Controller是控制层的标识，项目启动时springboot会扫描各个模块的注解，由此区分各个分层
+@Controller
+public class LoginController {
+}

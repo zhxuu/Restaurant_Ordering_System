@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qianfeng.qingdashixun.mapper.CommodityMapper">
+    <insert id="commodityAdd">
+        insert into tb_commodity(commodityName,brand,type,price,img_url,mdf,exp,state)
+            values(#{commodityName},#{brand},#{type},#{price},#{img_url},#{mdf},#{exp},#{state})
+    </insert>
+    <update id="commodityUpd">
+        update tb_commodity set
+                                commodityName = #{commodityName},
+                                brand = #{brand},
+                                type = #{type},
+                                price = #{price},
+                                img_url = #{img_url},
+                                mdf = #{mdf},
+                                exp = #{exp},
+                                state = #{state}
+        where id = #{id}
+    </update>
+    <delete id="del">
+        delete from tb_commodity where id = #{id}
+    </delete>
+    <select id="getCommodityList" resultType="com.qianfeng.qingdashixun.pojo.Commodity">
+        select * from tb_commodity
+            <where>
+                1=1
+                <if test="commodityName != null and commodityName !=''">
+                     and commodityName like concat('%',#{commodityName},'%')
+                </if>
+                <if test="brand != null and brand !=''">
+                    and brand like concat('%',#{brand},'%')
+                </if>
+                <if test="type != null and type !=''">
+                    and type =#{type}
+                </if>
+                <if test="price_max != null and price_max != 0 and price_min != null">
+                    and price >#{price_min} and price &lt; #{price_max}
+                </if>
+            </where>
+    </select>
+    <select id="getCommodityById" resultType="com.qianfeng.qingdashixun.pojo.Commodity">
+        select * from tb_commodity where id = #{id}
+    </select>
+    <select id="getCommodityByType" resultType="com.qianfeng.qingdashixun.pojo.Commodity">
+        select * from tb_commodity
+        <where>
+            state=1
+            <if test="type != null and type !=''">
+                and type like concat('%',#{type},'%')
+            </if>
+        </where>
+    </select>
+    <select id="getCommodityByName" resultType="com.qianfeng.qingdashixun.pojo.Commodity">
+        select * from tb_commodity
+        <where>
+            state=1
+            <if test="commodityName != null and commodityName !=''">
+                and commodityName like concat('%',#{commodityName},'%')
+            </if>
+        </where>
+    </select>
+</mapper>

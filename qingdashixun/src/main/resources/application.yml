@@ -1,0 +1,31 @@
+server:
+  #   ???
+  port: 8080
+  servlet:
+  #   ???? 8080 ?????http://localhost:8080
+    context-path: /shixun
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/qingda?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true
+    #数据库用户
+    username: root
+    #数据库密码
+    password: zhangxu1234
+  thymeleaf:
+    #???????
+    prefix: classpath:/templates/
+    #???????
+    suffix: .html
+    #????
+    catch: false
+    #????
+    encoding: utf-8
+    #??
+    mode: HTML5
+  mvc:
+    #配置静态资源文件
+    static-path-pattern: /static/**
+mybatis:
+  type-aliases-package: com.qianfeng.qingdashixun.pojo
+  mapper-locations: classpath:/mapper/*Mapper.xml

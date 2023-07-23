@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>商品选择</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="//cdn.staticfile.org/layui/2.8.9/css/layui.css" rel="stylesheet">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <!--    <link rel="stylesheet" type="text/css" href="layui.css" media="all">-->
+  <!--    <link rel="stylesheet" type="text/css" href="bootstrap.css" media="all">-->
+  <link rel="stylesheet" type="text/css" href="global.css" media="all">
+  <link rel="stylesheet" type="text/css" href="personal.css" media="all">
+  <style type="text/css">
+    /*.mybody {*/
+    /*  background:/shixun/static/images/345.jpg*/
+    /*  !*background-repeat:repeat;*!*/
+    /*}*/
+
+    .article-container{
+      background-color: #ffffff;
+      padding-top:20px;
+      width:1024px;
+      margin:20px auto;
+    }
+
+    .article_r{
+      padding-top:10px;
+      float:right;
+    }
+    .pulisher,.time,.article_view,.article_comments,.article_del{
+      clear:both;
+      margin-right:25px;
+      font-size: 15px;
+    }
+    .title{
+      font-weight:bold;
+      font-size: 30px;
+      text-align: center;
+    }
+    .article_content{
+      background: #ffffff;
+      clear:both;
+      padding:1em 4em;
+      margin-top: 40px;
+    }
+    p{
+      text-indent: 2em;
+      text-overflow: hidden;
+      font-size:18px;
+    }
+
+    /*话题内容图片*/
+    .ImgContent{
+      width:350px;
+      margin:0px auto;
+      padding: 5px;
+      overflow:hidden;
+
+    }
+
+    .NavLinks{
+      padding:5px;
+      width:100px;
+      height: 100px;
+      float: left;
+      overflow: hidden;
+    }
+
+    .NavLinks img{
+      width: 100%;
+      height: 100%;
+    }
+    .hitShowPic {
+      width:350px;
+      clear:both;
+      margin-left:430px;
+    }
+    .hitShowPic span {
+      font-size: 15px;
+      text-align: center;
+    }
+    /*以下评论的css*/
+    .show_reply_list {
+      margin-right:1em;
+      color: grey;
+    }
+    .comment_list {
+      background-color: #ffffff;
+      padding-top:5px;
+      width:900px;
+      margin:0 auto;
+      bottom: 0px;
+      position: relative;
+    }
+    .comment {
+      width:900px;
+      margin-top:10px;
+    }
+    .comment_details {
+      float:right;
+    }
+    .comment_content {
+      clear:both;
+      margin:5px 50px;
+      font-size:16px;
+    }
+    .comment_add_or_last {
+
+      margin:0 auto;
+      clear: both;
+      width:600px;
+      height:50px;
+      background: #F0F0F0;
+      text-align: center;
+      font-size:20px;
+      line-height: 40px;   //行高（与div保持同高，垂直居中写法）
+    margin-bottom: 40px;
+    }
+    .imgdiv{
+      width:80px;
+      height:70px;
+      float:left;
+
+    }
+    .imgcss {
+      width:60px;
+      height:60px;
+      border-radius: 50%;
+    }
+    .comment_name {
+      margin-left:10px;
+      color:#3D9EEA;
+      font-size:16px;
+      font-weight: bolder;
+    }
+    .layui-icon {
+      font-size: 13px;
+      color: grey;
+    }
+    .del {
+      float:right;
+
+    }
+    .del_comment {
+      margin-right:50px;
+    }
+
+
+
+    .reply_list {
+      clear:both;
+      display:none;
+      width:900px;
+
+      padding-right:15px;
+      margin-top:10px;
+      font-size:16px;
+
+    }
+    .reply {
+      clear:both;
+      width:700px;
+      margin:4px auto;
+
+    }
+    .reply_name {
+      color:#3D9EEA;
+    }
+    .del_reply {
+      float:right;
+    }
+    .show_remain_reply {
+      width:600px;
+      height:40px;
+      text-align:center;font-size:18px;
+      background-color: #F0F0F0;
+      margin:0 auto;
+      line-height: 40px;
+      display:none;
+    }
+  </style>
+</head>
+<body style="background-color: lavender">
+<div class="layui-layout layui-layout-admin" >
+  <div class="layui-header">
+    <div class="layui-logo layui-hide-xs layui-bg-black">商品选择</div>
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item layui-hide layui-show-sm-inline-block">
+        <a href="javascript:;">
+          <img src="//unpkg.com/outeres@0.0.10/img/layui/icon-v2.png" class="layui-nav-img">
+          tester
+        </a>
+      </li>
+      <li class="layui-nav-item" lay-header-event="menuRight" lay-unselect>
+        <a href="javascript:;">
+          <i class="layui-icon layui-icon-more-vertical"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="layui-body" >
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+      <blockquote class="layui-elem-quote layui-text" style="background-color: cornsilk">
+        商品列表
+      </blockquote>
+      <input hidden="hidden" th:value="${type}" id="type">
+
+      <form class="layui-form layui-form-pane" action="" >
+        <div class="layui-form-item">
+          <div class="layui-inline" >
+            <label class="layui-form-label" style="background-color: cornsilk">商品名称</label>
+            <div class="layui-input-inline">
+              <input type="text" name="commodityName" id="commodityName" autocomplete="off" class="layui-input" style="background-color: cornsilk">
+            </div>
+          </div>
+
+
+
+        </div>
+        <div class="layui-form-item">
+          <button class="layui-btn" lay-submit lay-filter="search">搜索</button>
+        </div>
+      </form>
+
+
+      <table class="layui-hide" id="table" >
+        <!--                <tr>-->
+        <!--                    <th>商品名称</th>-->
+        <!--                    <th>品牌</th>-->
+        <!--                    <th>商品类型</th>-->
+        <!--                    <th>商品价格</th>-->
+        <!--                    <th>封面</th>-->
+        <!--                    <th>操作</th>-->
+        <!--                </tr>-->
+      </table>
+    </div>
+  </div>
+</div>
+<script type="text/html" id="barDemo" lay-filter="test">
+  <div class="layui-clear-space">
+    <a class="layui-btn layui-btn-s" lay-event="edit">下单</a>
+
+  </div>
+</script>
+
+
+
+<footer>
+  <div class="article-container" style="margin-top: 1200px;background-color:lavenderblush">
+
+
+
+    <div class="comment_list" style="background-color:lavenderblush">
+      <h3 style="text-indent: 2em;">评论列表</h3>
+      <hr>
+      <div class="comment">
+        <div class="imgdiv">
+          <img class="imgcss"  src="/shixun/static/images/123.jpg">
+        </div>
+        <div class="conmment_details">
+          <div style="float:left;">
+            <span class="comment_name">A老张1988</span>     <span>  23    2023.07.07</span>
+
+          </div>
+
+          <div class="comment_content" > 经常在你店里买，味道不错很好吃，分量很足，价格便宜，及时送达，包装完整，服务态度好，下次再来。
+          </div>
+        </div>
+      </div>
+      <hr>
+
+      <div class="comment">
+        <div class="imgdiv">
+          <img class="imgcss"  src="/shixun/static/images/345.jpg"/>
+        </div>
+        <div class="conmment_details">
+          <div style="float:left;">
+            <span class="comment_name">AAA建材批发市场老刘</span>     <span>      2023.07.04</span>
+          </div>
+          <div class="comment_content" >  不想出门的大好处就是在家里也能吃到这么好吃的外卖，想吃哪家点哪家。这家真的非常好吃，我已经点了不知道多少次了，每次的水准都在线，从始至终的好吃，干净。
+          </div>
+        </div>
+
+      </div>
+      <hr>
+      <div class="comment">
+        <div class="imgdiv">
+          <img class="imgcss"  src="/shixun/static/images/234.jpg">
+        </div>
+        <div class="conmment_details">
+          <div style="float:left;">
+            <span class="comment_name">勇往直前的孤狼</span>     <span>      2023.07.03</span>
+
+          </div>
+          <div class="comment_content" >  好吃，赞，这家店自己已经回购很多次了，包括周围的朋友都被自己疯狂安利，他们也说味道不错，一来是食物好吃，而且食材新鲜，而且分量也够吃。
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</footer>
+
+
+<!--jquery.js-->
+<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.min.js"></script>
+<script src="//cdn.staticfile.org/layui/2.8.9/layui.js"></script>
+<script>
+
+  function toupd(id){
+    location.href="http://localhost:8080/shixun/commodity/tocusOrder?id="+id;
+  }
+
+  //JS
+  layui.use(['element', 'layer', 'util','form'], function(){
+    var element = layui.element;
+    var layer = layui.layer;
+    var util = layui.util;
+    var form = layui.form;
+    var table = layui.table;
+    var $ = layui.$;
+    var type = $("#type").val();
+
+    // var state = $("#state").val();
+    $.ajax({
+      url:"http://localhost:8080/shixun/commodity/getCommodityByType",
+      dataType:"json",
+      data:{"type":type},
+      type:"post",
+      success:function (res){
+        var datas = res.data;
+        tableShow(datas);
+      }
+    })
+    table.on('tool(table)', function(obj){ // 双击 toolDouble
+      console.log("123");
+      var data = obj.data; // 获得当前行数据
+      // console.log(obj)
+      if(obj.event === 'edit'){
+        toupd(data.id);
+      }
+    });
+    function tableShow(data){
+      // for(var i=0;i<data.length;i++){
+      //     $("table").append("<tr class='asd'>" +
+      //         "<td>"+data[i].commodityName+"</td>" +
+      //         "<td>"+data[i].brand+"</td>" +
+      //         "<td>"+data[i].type+"</td>" +
+      //         "<td>"+data[i].price+"</td>" +
+      //         "<td><img src='"+data[i].img_url+"'/></td>" +
+      //         "<td>" +
+      //         "<button class='layui-btn layui-btn-warm' onclick='toupd("+data[i].id+")'>修改</button>" +
+      //         "<button class='layui-btn layui-btn-danger' onclick='todel("+data[i].id+")'>删除</button>" +
+      //         "</td>" +
+      //         "</tr>")
+      // }
+      table.render({
+        lineStyle: 'height: 151px;', // 定义表格的多行样式
+        height: 'full-35',
+        elem: '#table',
+
+        cols: [
+          [ //标题栏
+            {field: 'id', title: 'id', width: 240},
+            {field: 'img_url', title: '封面', width: 320,style:'background-color:lavenderblush;',templet:function (data) {
+                return "<img src='"+data.img_url+"' />"
+              }},
+            {field: 'commodityName', title: '商品名', width: 240,style:'background-color:lavenderblush;'},
+            {field: 'brand', title: '品牌', width: 200,style:'background-color:lavenderblush;'},
+            // {field: 'type', title: '类型', width: 440},
+            {field: 'price', title: '价格', width: 120,sort:true,style:'background-color:lavenderblush;'},
+
+            {field: 'mdf', title: '生产日期', width: 200,style:'background-color:lavenderblush;'},
+            {field: 'exp', title: '保质期', width: 200,style:'background-color:lavenderblush;'},
+            // {field: 'state', title: '上架状态', width: 200},
+            {fixed: 'right', title:'操作', width: 134, minWidth: 125, toolbar: '#barDemo',style:'background-color:lavenderblush;'}
+          ]
+        ],
+      //   done: function (res, curr, count) {
+      //   //循环表数据根据flag状态给行上色
+      //   $.each(res['data'], function (i, j) {
+      //     console.log(i + ' -454- ' + j['tm']);
+      //
+      //     if (j['flag'] === '') {
+      //
+      //       // console.log(i + ' -458- ' + 'jdjg is null');
+      //       Layui_SetDataTableRowColor('table', i + 1, '#b1070a');
+      //     } else {
+      //       // console.log(i + ' -458- ' + 'jdjg is not null');
+      //       Layui_SetDataTableRowColor('table', i + 1, '#0e1ab1');
+      //     }
+      //
+      //   });
+      //
+      //
+      // },
+
+        data: data,
+        //skin: 'line', // 表格风格
+        //even: true,
+        page: true, // 是否显示分页
+        limits: [5, 10, 15],
+        limit: 5 // 每页默认显示的数量
+      });
+      // 设置对应列的显示或隐藏
+      table.hideCol('table', {
+        field: 'id', // 对应表头的 field 属性值
+        hide: true // `true` or `false`
+      });
+    }
+    /**
+     * 搜索事件
+     *
+     */
+
+    form.on("submit(search)",function (data){
+      // var field = data.field; // 获取表单字段值
+      // field.type=type;
+      // field.commodityName=commodityName;
+      var commodityName = $("#commodityName").val();
+      $.ajax({
+        url:"http://localhost:8080/shixun/commodity/getCommodityByName",
+        data:{"commodityName":commodityName},
+        dataType:"json",
+        type:"post",
+        success:function (res){
+          var datas = res.data;
+          $(".asd").remove();
+          tableShow(datas);
+        }
+      })
+      return false;
+    })
+
+    //头部事件
+    // util.event('lay-header-event', {
+    //   menuLeft: function(othis){ // 左侧菜单事件
+    //     layer.msg('展开左侧菜单的操作', {icon: 0});
+    //   },
+    //   menuRight: function(){  // 右侧菜单事件
+    //     layer.open({
+    //       type: 1,
+    //       title: '更多',
+    //       content: '<div style="padding: 15px;">处理右侧面板的操作</div>',
+    //       area: ['260px', '100%'],
+    //       offset: 'rt', // 右上角
+    //       anim: 'slideLeft', // 从右侧抽屉滑出
+    //       shadeClose: true,
+    //       scrollbar: false
+    //     });
+    //   }
+    // });
+  });
+</script>
+</body>
+</html>
